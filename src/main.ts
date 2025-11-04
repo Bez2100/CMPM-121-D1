@@ -51,7 +51,29 @@ sushiButton.addEventListener("click", () => {
 
 // --- Step 3: Automatic Clicking ---
 setInterval(() => {
-  counter += 1; // increment automatically
+  counter += 1;
   counterDiv.textContent = `${counter} sushi rolls 🍣`;
-  console.log(`Automatic sushi sold: ${counter}`);
-}, 1000); // every 1000 milliseconds = 1 second
+}, 1000);
+
+// --- Step 4: Continuous Growth (replace setInterval) ---
+let timeAccumulator = 0;
+let lastTime = performance.now();
+
+function updateCounter(currentTime: number) {
+  const deltaTime = (currentTime - lastTime) / 1000; // convert ms → seconds
+  lastTime = currentTime;
+
+  // Add time since last frame
+  timeAccumulator += deltaTime;
+
+  // Every full second, increase counter by 1
+  if (timeAccumulator >= 1) {
+    counter += 1;
+    timeAccumulator -= 1;
+    counterDiv.textContent = `${counter} sushi rolls 🍣`;
+  }
+
+  // Continue the animation loop
+  requestAnimationFrame(updateCounter);
+}
+
