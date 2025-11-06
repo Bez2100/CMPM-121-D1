@@ -77,3 +77,63 @@ function updateCounter(currentTime: number) {
   requestAnimationFrame(updateCounter);
 }
 
+// --- Step 5: Purchasing an upgrade ---
+
+// Start with no automatic growth at the beginning
+let growthRate = 0;
+
+// Create an "Upgrade" button
+const upgradeButton = document.createElement("button");
+upgradeButton.textContent = "🍣 Buy Upgrade (+1/sec)";
+upgradeButton.style.fontSize = "1.2rem";
+upgradeButton.style.padding = "0.5em 1em";
+upgradeButton.style.marginTop = "1rem";
+upgradeButton.style.borderRadius = "10px";
+upgradeButton.style.border = "2px solid #ccc";
+upgradeButton.style.backgroundColor = "#f0f0f0";
+upgradeButton.style.cursor = "pointer";
+upgradeButton.disabled = true; // disabled until player has ≥10
+container.appendChild(upgradeButton);
+
+// Update the button state based on counter value
+function updateUpgradeButton() {
+  if (counter >= 10) {
+    upgradeButton.disabled = false;
+    upgradeButton.style.backgroundColor = "#d1ffd1"; // green when available
+  } else {
+    upgradeButton.disabled = true;
+    upgradeButton.style.backgroundColor = "#f0f0f0"; // grey when locked
+  }
+}
+
+// Handle upgrade purchase
+upgradeButton.addEventListener("click", () => {
+  if (counter >= 10) {
+    counter -= 10;        // spend sushi
+    growthRate += 1;      // increase automatic rate by +1 per second
+    counterDiv.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
+    console.log(`Upgrade purchased! Growth rate is now ${growthRate}/sec.`);
+    updateUpgradeButton();
+  }
+});
+
+
+function animate(time: number) {
+  const delta = (time - lastTime) / 1000; // seconds since last frame
+  lastTime = time;
+
+  // Apply automatic sushi growth
+  counter += growthRate * delta;
+
+  // Update counter display
+  counterDiv.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
+
+  // Update upgrade button availability
+  updateUpgradeButton();
+
+  // Continue animation
+  requestAnimationFrame(animate);
+}
+
+// Restart animation loop
+requestAnimationFrame(animate);
