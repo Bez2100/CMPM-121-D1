@@ -49,31 +49,7 @@ sushiButton.addEventListener("click", () => {
   console.log(`You sold ${counter} sushi rolls so far!`);
 });
 
-// --- Step 3: Automatic Clicking ---
-setInterval(() => {
-  counter += 1;
-  counterDiv.textContent = `${counter} sushi rolls 🍣`;
-}, 1000);
-
-
-
-// --- Step 6: Multiple upgrades and status ---
 let growthRate = 0;
-type Upgrade = {
-  name: string;
-  cost: number;
-  rate: number;
-  count: number;
-  button: HTMLButtonElement;
-};
-
-// Define upgrades
-const upgrades: Upgrade[] = [
-  { name: "Sashimi", cost: 10, rate: 2, count: 0, button: document.createElement("button") },
-  { name: "Temaki", cost: 100, rate: 10, count: 0, button: document.createElement("button") },
-  { name: "Nigiri", cost: 1000, rate: 50, count: 0, button: document.createElement("button") },
-];
-
 
 // Create a container for upgrades
 const upgradesContainer = document.createElement("div");
@@ -90,50 +66,6 @@ statusDiv.style.fontFamily = "monospace";
 statusDiv.style.fontSize = "1.2rem";
 container.appendChild(statusDiv);
 
-function updateStatus() {
-  statusDiv.textContent =
-    `Growth rate: ${growthRate.toFixed(1)} sushi/sec\n` +
-    `Owned: ${upgrades.map(u => `${u.name}×${u.count}`).join("  ")}`;
-}
-
-// --- Create upgrade buttons dynamically ---
-upgrades.forEach(upg => {
-  upg.button.textContent = `Buy Upgrade ${upg.name} (+${upg.rate}/sec) - Cost: ${upg.cost}`;
-  upg.button.style.fontSize = "1rem";
-  upg.button.style.padding = "0.5em 1em";
-  upg.button.style.borderRadius = "10px";
-  upg.button.style.border = "2px solid #ccc";
-  upg.button.style.cursor = "pointer";
-  upg.button.disabled = true;
-
-  upg.button.addEventListener("click", () => {
-    if (counter >= upg.cost) {
-      counter -= upg.cost;
-      upg.count += 1;
-      growthRate += upg.rate;
-      upg.cost = Math.floor(upg.cost * 1.2); // optional price scaling
-      upg.button.textContent = ` Buy Upgrade ${upg.name} (+${upg.rate}/sec) - Cost: ${upg.cost}`;
-      updateStatus();
-    }
-  });
-
-  upgradesContainer.appendChild(upg.button);
-});
-
-
-// --- Update availability ---
-function updateUpgradeButtons() {
-  upgrades.forEach(upg => {
-    if (counter >= upg.cost) {
-      upg.button.disabled = false;
-      upg.button.style.backgroundColor = "#d1ffd1";
-    } else {
-      upg.button.disabled = true;
-      upg.button.style.backgroundColor = "#f0f0f0";
-    }
-  });
-}
-
 // --- Main animation loop ---
 let lastTime = performance.now();
 function animate(time: number) {
@@ -145,10 +77,86 @@ function animate(time: number) {
 
   // Update display
   counterDiv.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
-  updateUpgradeButtons();
+  updateButtons();
   updateStatus();
 
   requestAnimationFrame(animate);
 }
 
 requestAnimationFrame(animate);
+
+// --- Step 9: Data-driven items ---
+
+interface Item {
+  name: string;
+  cost: number;
+  rate: number;
+}
+
+// Data-only item definitions
+const availableItems: Item[] = [
+  { name: "Sous Chef Helper 👨‍🍳", cost: 10, rate: 2 },
+  { name: "Conveyor Belt 🍣➡️", cost: 100, rate: 10 },
+  { name: "Robot Sushi Machine 🤖🍣", cost: 1000, rate: 50 },
+];
+
+// These track gameplay state
+const itemButtons: HTMLButtonElement[] = [];
+const itemCounts: number[] = Array(availableItems.length).fill(0);
+
+function createItemButtons() {
+  availableItems.forEach((item, index) => {
+    const btn = document.createElement("button");
+    btn.textContent =
+      `Buy ${item.name} (+${item.rate}/sec) - Cost: ${item.cost}`;
+    btn.style.fontSize = "1rem";
+    btn.style.padding = "0.5em 1em";
+    btn.style.borderRadius = "10px";
+    btn.style.border = "2px solid #ccc";
+    btn.style.cursor = "pointer";
+    btn.disabled = true;
+
+    btn.addEventListener("click", () => {
+      if (counter >= item.cost) {
+        counter -= item.cost;
+        itemCounts[index]++;
+
+        // Increase growth rate
+        growthRate += item.rate;
+
+        // Scale cost
+        item.cost = Math.floor(item.cost * 1.2);
+
+        btn.textContent =
+          `Buy ${item.name} (+${item.rate}/sec) - Cost: ${item.cost}`;
+        updateStatus();
+      }
+    });
+
+    itemButtons.push(btn);
+    upgradesContainer.appendChild(btn);
+  });
+}
+
+createItemButtons();
+
+function updateButtons() {
+  availableItems.forEach((item, index) => {
+    const btn = itemButtons[index];
+    if (counter >= item.cost) {
+      btn.disabled = false;
+      btn.style.backgroundColor = "#d1ffd1";
+    } else {
+      btn.disabled = true;
+      btn.style.backgroundColor = "#f0f0f0";
+    }
+  });
+}
+
+function updateStatus() {
+  statusDiv.textContent =
+    `Growth rate: ${growthRate.toFixed(1)} sushi/sec\nOwned: ` +
+    availableItems
+      .map((item, i) => `${item.name}×${itemCounts[i]}`)
+      .join("  ");
+}
