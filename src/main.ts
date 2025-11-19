@@ -63,7 +63,7 @@ sushiButton.addEventListener("click", () => {
   clickCount++;
 
   // Golden mode activated
-  if ( goldenSushiUnlocked && clickCount >= goldenThreshold) {
+  if (goldenSushiUnlocked && clickCount >= goldenThreshold) {
     counter += counter * 1; // double (adds another full counter amount)
     triggerGoldenState();
 
@@ -154,8 +154,7 @@ statusDiv.style.fontSize = "1.1rem";
 container.appendChild(statusDiv);
 
 function updateStatus() {
-  statusDiv.textContent =
-    `Growth rate: ${growthRate.toFixed(1)} sushi/sec\n` +
+  statusDiv.textContent = `Growth rate: ${growthRate.toFixed(1)} sushi/sec\n` +
     `Owned: ${availableItems.map((u) => `${u.name}×${u.count}`).join("  ")}`;
 }
 
@@ -187,10 +186,7 @@ availableItems.forEach((item) => {
       if (item.name.includes("Ancient Sushi Scroll")) {
         growthRate *= 1.1; // +10% boost
         goldenSushiUnlocked = true;
-
       }
-      
-      
 
       // Update button text with new cost
       item.button.textContent =
