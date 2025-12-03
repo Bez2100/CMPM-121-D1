@@ -11,13 +11,13 @@ document.body.appendChild(container);
 let counter: number = 0; // start at 0
 
 // Create a <div> to display the counter
-const counterDiv = document.createElement("div");
-counterDiv.textContent = `${counter} sushi rolls 🍣`;
-counterDiv.style.fontSize = "2rem";
-counterDiv.style.marginBottom = "1rem";
-counterDiv.style.fontFamily = "sans-serif";
-counterDiv.style.color = "#333";
-container.appendChild(counterDiv);
+const sushiCounterDisplay = document.createElement("div");
+sushiCounterDisplay.textContent = `${counter} sushi rolls 🍣`;
+sushiCounterDisplay.style.fontSize = "2rem";
+sushiCounterDisplay.style.marginBottom = "1rem";
+sushiCounterDisplay.style.fontFamily = "sans-serif";
+sushiCounterDisplay.style.color = "#333";
+container.appendChild(sushiCounterDisplay);
 
 // --- Sushi button setup ---
 const sushiButton = document.createElement("button");
@@ -52,7 +52,7 @@ interface Item {
 }
 
 // GoldenButton set up and text
-let clickCount = 0;
+let goldenClicks = 0;
 const goldenThreshold = 20; // starts at 20 clicks
 
 function triggerGoldenState() {
@@ -69,22 +69,22 @@ function endGoldenState() {
 
 // --- Step 2: Button click behavior ---
 sushiButton.addEventListener("click", () => {
-  clickCount++;
+  goldenClicks++;
 
   // Golden mode activated
-  if (goldenSushiUnlocked && clickCount >= goldenThreshold) {
+  if (goldenSushiUnlocked && goldenClicks >= goldenThreshold) {
     counter += counter * 1; // double (adds another full counter amount)
     triggerGoldenState();
 
     // After a moment, switch back to normal
     setTimeout(endGoldenState, 700);
 
-    clickCount = 0;
+    goldenClicks = 0;
   } else {
     counter += 1;
   }
 
-  counterDiv.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
+  sushiCounterDisplay.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
 });
 
 // Upgrades : Defines the purchaseable upgrades with the cost, rates, and descriptions
@@ -219,7 +219,7 @@ function animate(time: number) {
 
   counter += growthRate * delta;
 
-  counterDiv.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
+  sushiCounterDisplay.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
   updateUpgradeButtons();
   updateStatus();
 
