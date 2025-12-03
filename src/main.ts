@@ -42,6 +42,15 @@ sushiButton.addEventListener("mouseout", () => {
   sushiButton.style.backgroundColor = "#fff5f5";
 });
 
+interface Item {
+  name: string;
+  cost: number;
+  rate: number;
+  description: string;
+  count: number;
+  button: HTMLButtonElement;
+}
+
 // GoldenButton set up and text
 let clickCount = 0;
 const goldenThreshold = 20; // starts at 20 clicks
@@ -81,15 +90,6 @@ sushiButton.addEventListener("click", () => {
 // Upgrades : Defines the purchaseable upgrades with the cost, rates, and descriptions
 let growthRate = 0;
 let goldenSushiUnlocked = false;
-
-interface Item {
-  name: string;
-  cost: number;
-  rate: number;
-  description: string;
-  count: number;
-  button: HTMLButtonElement;
-}
 
 // --- FULL UPGRADE LIST INCLUDING ANCIENT SCROLL ---
 const availableItems: Item[] = [
