@@ -42,7 +42,7 @@ sushiButton.addEventListener("mouseout", () => {
   sushiButton.style.backgroundColor = "#fff5f5";
 });
 
-// --- Step 10 Click Mechanics (Golden Button) ---
+// GoldenButton set up and text
 let clickCount = 0;
 const goldenThreshold = 20; // starts at 20 clicks
 
@@ -78,7 +78,7 @@ sushiButton.addEventListener("click", () => {
   counterDiv.textContent = `${Math.floor(counter)} sushi rolls 🍣`;
 });
 
-// Step 10: Data-driven upgrades ---
+// Upgrades : Defines the purchaseable upgrades with the cost, rates, and descriptions
 let growthRate = 0;
 let goldenSushiUnlocked = false;
 
