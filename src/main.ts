@@ -1,12 +1,35 @@
 // --- Step 1: Centered container setup ---
 const container = document.createElement("div");
 container.style.display = "flex";
-container.style.flexDirection = "column"; // stack counter and button vertically
+container.style.flexDirection = "column";
 container.style.justifyContent = "center";
 container.style.alignItems = "center";
-container.style.height = "100vh"; // full screen height
-container.style.backgroundColor = "#fffaf0"; // optional light background
+container.style.height = "100vh";
+
+// --- Sushi shop background ---
+container.style.backgroundImage =
+  "url('https://s3-media0.fl.yelpcdn.com/bphoto/mVURSCqR6QzJWZmi2CoWbQ/1000s.jpg')";
+container.style.backgroundSize = "cover";
+container.style.backgroundPosition = "center";
+container.style.backgroundRepeat = "no-repeat";
+container.style.backgroundAttachment = "fixed";
+
 document.body.appendChild(container);
+
+const sideImage = document.createElement("img");
+
+sideImage.src =
+  "https://th.bing.com/th/id/OIP.a1GqH9_Ws3W4TTJDG4i7TQHaHa?w=177&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1";
+
+// Style the image
+sideImage.style.position = "fixed";
+sideImage.style.left = "20px";
+sideImage.style.top = "120px";
+sideImage.style.width = "200px";
+sideImage.style.borderRadius = "12px";
+sideImage.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
+
+document.body.appendChild(sideImage);
 
 let counter: number = 0; // start at 0
 
@@ -16,7 +39,7 @@ sushiCounterDisplay.textContent = `${counter} sushi rolls 🍣`;
 sushiCounterDisplay.style.fontSize = "2rem";
 sushiCounterDisplay.style.marginBottom = "1rem";
 sushiCounterDisplay.style.fontFamily = "sans-serif";
-sushiCounterDisplay.style.color = "#333";
+sushiCounterDisplay.style.color = "#f3eeeeff";
 container.appendChild(sushiCounterDisplay);
 
 // --- Sushi button setup ---
@@ -152,6 +175,7 @@ statusDiv.style.marginTop = "1rem";
 statusDiv.style.fontFamily = "monospace";
 statusDiv.style.fontSize = "1.1rem";
 container.appendChild(statusDiv);
+statusDiv.style.color = "white";
 
 function updateStatus() {
   statusDiv.textContent = `Growth rate: ${growthRate.toFixed(1)} sushi/sec\n` +
